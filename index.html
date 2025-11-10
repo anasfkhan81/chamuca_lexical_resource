@@ -1,88 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Chamuça SPARQL Explorer</title>
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/@triply/yasgui@3.0.16/build/yasgui.min.css"
-  />
-  <script src="https://cdn.jsdelivr.net/npm/@triply/yasgui@3.0.16/build/yasgui.min.js"></script>
-<style>
-  html, body {
-    margin: 0; padding: 0; height: 100%;
-    font-family: sans-serif;
-  }
-  #toolbar {
-    padding: 1rem;
-    background: #f8f8f8;
-    border-bottom: 1px solid #ddd;
-  }
-  #toolbar button {
-    margin-right: 1rem;
-    padding: 0.5rem 1rem;
-    background: #007acc;
-    border: none;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  #toolbar button:hover {
-    background: #005fa3;
-  }
-  #yasgui {
-    height: calc(100vh - 60px);
-  }
-
-  /* 🎨 Make endpoint selector khaki */
-  .yasgui .endpointInputWrapper {
-    background-color: khaki !important;
-    padding: 0.2rem;
-    border-radius: 4px;
-  }
-
-  .yasgui .endpointInputWrapper input {
-    background-color: khaki !important;
-    font-weight: bold;
-  }
-
-</style>
-
-</head>
-<body>
-  <div id="toolbar">
-    <button onclick="loadQuery('lexical')">Lexical Entries</button>
-    <button onclick="loadQuery('hindi')">Hindi Entries</button>
-    <button onclick="loadQuery('etymons')">Portuguese Etymons</button>
-    <!-- Add more buttons here -->
-  </div>
-
-  <div id="yasgui"></div>
-
-  <script>
-    const endpointUrl = "https://lari-datasets.ilc.cnr.it/chamuca/query";
-
-    const yasgui = new Yasgui(document.getElementById("yasgui"), {
-      persistenceId: null,
-      requestConfig: {
-        endpoint: endpointUrl
-      },
-      yasguiConfig: {
-        showEndpointSelector: false
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chamuça SPARQL Explorer</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@triply/yasgui@3.0.16/build/yasgui.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@triply/yasgui@3.0.16/build/yasgui.min.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: sans-serif;
       }
-    });
+      #toolbar {
+        padding: 1rem;
+        background: #f8f8f8;
+        border-bottom: 1px solid #ddd;
+      }
+      #toolbar button {
+        margin-right: 1rem;
+        padding: 0.5rem 1rem;
+        background: #007acc;
+        border: none;
+        color: white;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      #toolbar button:hover {
+        background: #005fa3;
+      }
+      #yasgui {
+        height: calc(100vh - 60px);
+      }
 
-    const tab = yasgui.getTab();
-    tab.setEndpoint(endpointUrl);
+      /* 🎨 Make endpoint selector khaki */
+      .yasgui .endpointInputWrapper {
+        background-color: khaki !important;
+        padding: 0.2rem;
+        border-radius: 4px;
+      }
 
-    // Load the default query
-    loadQuery("lexical");
+      .yasgui .endpointInputWrapper input {
+        background-color: khaki !important;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="toolbar">
+      <button onclick="loadQuery('lexical')">Lexical Entries</button>
+      <button onclick="loadQuery('hindi')">Hindi Entries</button>
+      <button onclick="loadQuery('etymons')">Portuguese Etymons</button>
+      <!-- Add more buttons here -->
+    </div>
 
-    function loadQuery(type) {
-      if (type === "lexical") {
-        tab.setName("All Lexical Entries");
-        tab.setQuery(`PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
-PREFIX skos: <http://www.w3.org/2004/02/skos/core#> 
+    <div id="yasgui"></div>
+
+    <script>
+      const endpointUrl = "https://lari-datasets.ilc.cnr.it/chamuca/query"
+
+      const yasgui = new Yasgui(document.getElementById("yasgui"), {
+        persistenceId: null,
+        requestConfig: {
+          endpoint: endpointUrl,
+        },
+        yasguiConfig: {
+          showEndpointSelector: false,
+        },
+      })
+
+      const tab = yasgui.getTab()
+      tab.setEndpoint(endpointUrl)
+
+      // Load the default query
+      loadQuery("lexical")
+
+      function loadQuery(type) {
+        if (type === "lexical") {
+          tab.setName("All Lexical Entries")
+          tab.setQuery(`PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#>
 
 # This query extracts the lemmas and definitions for all of the South Asian languages so far included
@@ -95,7 +93,7 @@ SELECT DISTINCT ?lang (GROUP_CONCAT(STR(?lemma); SEPARATOR=" / ") AS ?combinedFo
            ontolex:canonicalForm ?form ;
            ontolex:sense/skos:definition ?defn ;
            lexinfo:etymology ?et .
-      ?form ontolex:writtenRep ?lemma . 
+      ?form ontolex:writtenRep ?lemma .
       FILTER(LANG(?lemma) IN ("hi-Deva", "hi-Latn"))
     }
     BIND("hi" AS ?lang)
@@ -109,7 +107,7 @@ SELECT DISTINCT ?lang (GROUP_CONCAT(STR(?lemma); SEPARATOR=" / ") AS ?combinedFo
            ontolex:canonicalForm ?form ;
            ontolex:sense/skos:definition ?defn ;
            lexinfo:etymology ?et .
-      ?form ontolex:writtenRep ?lemma . 
+      ?form ontolex:writtenRep ?lemma .
       FILTER(LANG(?lemma) IN ("ur-Arab", "ur-Latn"))
     }
     BIND("ur" AS ?lang)
@@ -132,10 +130,10 @@ SELECT DISTINCT ?lang (GROUP_CONCAT(STR(?lemma); SEPARATOR=" / ") AS ?combinedFo
 }
 GROUP BY ?lex ?lang ?defn ?et
 ORDER BY ?lang ?combinedForm
-  `);
-      } else if (type === "hindi") {
-        tab.setName("Senses + Definitions");
-        tab.setQuery(`PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+  `)
+        } else if (type === "hindi") {
+          tab.setName("Senses + Definitions")
+          tab.setQuery(`PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
 PREFIX lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#>
 
 # This query compares the Hindi gender with Portuguese gender
@@ -165,11 +163,10 @@ SELECT ?hindiWordConcat ?hgen ?portugueseWord ?pgen WHERE {
           lexinfo:gender ?pgen .
   }
 }
- `);
-      }
-      else if (type === "etymons") {
-    tab.setName("Portuguese Etymons");
-    tab.setQuery(`
+ `)
+        } else if (type === "etymons") {
+          tab.setName("Portuguese Etymons")
+          tab.setQuery(`
     PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
 PREFIX lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#>
 
@@ -212,9 +209,9 @@ SELECT ?portugueseWord (SAMPLE(?hindiWord) AS ?hi) (SAMPLE(?urduWord) AS ?ur) (S
 }
 GROUP BY ?portugueseWord
 ORDER BY ?portugueseWord
-    `);
-  }
-    }
-  </script>
-</body>
+    `)
+        }
+      }
+    </script>
+  </body>
 </html>

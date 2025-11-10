@@ -70,16 +70,15 @@
         },
       })
 
-      const tab = yasgui.getTab()
-      tab.setEndpoint(endpointUrl)
+      yasgui.getTab().setEndpoint(endpointUrl)
 
       // Load the default query
       loadQuery("lexical")
 
       function loadQuery(type) {
         if (type === "lexical") {
-          tab.setName("All Lexical Entries")
-          tab.setQuery(`PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+          yasgui.getTab().setName("All Lexical Entries")
+          yasgui.getTab().setQuery(`PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#>
 
@@ -132,8 +131,8 @@ GROUP BY ?lex ?lang ?defn ?et
 ORDER BY ?lang ?combinedForm
   `)
         } else if (type === "hindi") {
-          tab.setName("Senses + Definitions")
-          tab.setQuery(`PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
+          yasgui.getTab().setName("Senses + Definitions")
+          yasgui.getTab().setQuery(`PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
 PREFIX lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#>
 
 # This query compares the Hindi gender with Portuguese gender
@@ -165,8 +164,8 @@ SELECT ?hindiWordConcat ?hgen ?portugueseWord ?pgen WHERE {
 }
  `)
         } else if (type === "etymons") {
-          tab.setName("Portuguese Etymons")
-          tab.setQuery(`
+          yasgui.getTab().setName("Portuguese Etymons")
+          yasgui.getTab().setQuery(`
     PREFIX ontolex: <http://www.w3.org/ns/lemon/ontolex#>
 PREFIX lexinfo: <http://www.lexinfo.net/ontology/2.0/lexinfo#>
 
